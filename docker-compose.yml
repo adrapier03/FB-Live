@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: fb-live-dashboard
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persist SQLite database
+      - ./prisma:/app/prisma
+      # Persist Uploaded files
+      - ./public/uploads:/app/public/uploads
+      # Persist stream state files if needed (optional, temp files)
+      # - ./stream_*.json:/app/stream_*.json 
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
